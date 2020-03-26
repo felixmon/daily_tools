@@ -1,4 +1,5 @@
-# split text with multiple separators from a text file and write the result to a new text file.
+# split text with multiple separators from a text file and write the result to a new text file,
+# and export to excel file for further analysis.
 
 import sys
 import os
@@ -11,18 +12,31 @@ f2 = open('2.txt','w')
 # state the list type variable 'result'
 result=[]
 
+# create empty dataframe
+df = pd.DataFrame()
+
 # read each line and split
 # use regex split method to split with multiple separators
 for item in f.readlines():
     result.append(re.split('，|。',item))
+
+n = 0
+j = 0
 
 # write the result into new text file
 # the reason that using two loops is that 'result' has two levels of list, and you cannot write a list directly to a text file, 
 # or it will raise a Type error: TypeError: write() argument must be str, not list
 for item in result:
     for item2 in item:
+        df.loc[j,str(n)] = item2# row 0, col['0']; row 1, col['0']; row 2, col['0']...
         f2.write(item2)
+        j += 1
         f2.write('\n')
+    n += 1
+    j = 0
+
+# export to excel file
+df.to_excel('1.xlsx')
 
 # this script is to help fast split the long paragraph that need to be type into excel and analyze
 # sample data:
